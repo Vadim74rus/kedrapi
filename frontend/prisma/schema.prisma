@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  email       String    @unique
+  password    String
+  name        String?
+  avatarUrl   String?
+  dateOfBirth DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bio         String?
+  location    String?
+  balance     Float    @default(0)
+  posts       Post[]
+  likes       Like[]
+  comments    Comment[]
+  followers   Follows[] @relation("following")
+  following   Follows[] @relation("follower")
+  miningSessions MiningSession[] // Добавлено поле для связи с MiningSession
+}
+
+model Follows {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  follower    User   @relation("follower", fields: [followerId], references: [id])
+  followerId  String @db.ObjectId
+  following   User   @relation("following", fields: [followingId], references: [id])
+  followingId String @db.ObjectId
+
+  @@index([followerId, followingId], name: "follower_following_index")
+}
+
+model Post {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String    @db.ObjectId
+  likes     Like[]
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+}
+
+model Like {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String @db.ObjectId
+
+  @@index([userId, postId], name: "user_post_index")
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  content String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @db.ObjectId
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String @db.ObjectId
+
+  @@index([userId, postId], name: "user_post_index")
+}
+
+model MiningSession {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  startTime   DateTime  @default(now())
+  endTime     DateTime?
+  speed       String    // Low, Norm, Hard
+  amountMined Float     @default(0)
+
+  @@index([userId], name: "user_mining_session_index")
+}
