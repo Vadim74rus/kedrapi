@@ -1,0 +1,193 @@
+body {
+    background-color: #333; /* Темно-серый фон */
+    color: #fff; /* Цвет текста */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.balance-container {
+    margin: 20px 0;
+}
+
+.balance {
+    font-size: 24px;
+}
+
+.rectangles-container {
+    display: grid;
+    gap: 1px; /* Расстояние между блоками */
+    margin-top: 10px;
+    width: 100%;
+    position: relative; /* Для позиционирования кнопки поверх блоков */
+}
+
+.rectangle {
+    width: 90%; /* Уменьшите ширину до 90% от родительского контейнера */
+    height: 40px;
+    background-color: #ccc;
+    transition: background-color 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 10px; /* Скругленные углы */
+}
+
+.rectangle.active.low {
+    background-color: #4b5563; /* Графитовый */
+}
+
+.rectangle.active.norm {
+    background-color: #00ff00; /* Зеленый */
+}
+
+.rectangle.active.hard {
+    background-color: #800080; /* Фиолетовый */
+}
+
+.rectangle.filling {
+    animation: fill 3s linear forwards;
+}
+
+@keyframes fill {
+    from {
+        background-color: #ccc;
+    }
+    to {
+        background-color: #00ff00; /* Цвет заполнения */
+    }
+}
+
+.plus-sign {
+    font-size: 12px;
+    color: #000; /* Черный */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.start-button {
+    position: absolute; /* Позиционирование кнопки поверх блоков */
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px 68px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.links {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.links button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Медиа-запросы для адаптации под различные разрешения */
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+    }
+
+    .balance {
+        font-size: 20px;
+    }
+
+    .start-button, .links button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .rectangles-container {
+        gap: 5px; /* Уменьшите расстояние между блоками для экранов шириной до 768px */
+    }
+
+    .rectangle {
+        width: 80%; /* Уменьшите ширину до 80% для экранов шириной до 768px */
+        height: 30px;
+        border-radius: 5px; /* Скругленные углы для меньших размеров */
+    }
+
+    .plus-sign {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 5px;
+    }
+
+    .balance {
+        font-size: 18px;
+    }
+
+    .start-button, .links button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .rectangles-container {
+        gap: 2px; /* Уменьшите расстояние между блоками для экранов шириной до 480px */
+    }
+
+    .rectangle {
+        width: 70%; /* Уменьшите ширину до 70% для экранов шириной до 480px */
+        height: 25px;
+        border-radius: 5px; /* Скругленные углы для меньших размеров */
+    }
+
+    .plus-sign {
+        font-size: 8px;
+    }
+}
+
+.icon {
+    transition: transform 0.3s ease;
+}
+
+.icon:active {
+    transform: scale(1.2);
+}
+
+/* Стили для анимации иконок */
+.icon {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.icon:active {
+    transform: scale(1.2);
+}
+
+/* Стили для цветов иконок в зависимости от режима */
+.low .icon {
+    color: green;
+}
+
+.norm .icon {
+    color: orange;
+}
+
+.hard .icon {
+    color: red;
+}
